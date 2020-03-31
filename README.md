@@ -1,1 +1,2 @@
 # Shikisha API
+[![Build and Tests](https://github.com/shikisha-io/Shikisha.Api/workflows/Build%20and%20Tests/badge.svg)](https://github.com/shikisha-io/Shikisha.Api/actions?query=workflow%3A%22Build+and+Tests%22)
