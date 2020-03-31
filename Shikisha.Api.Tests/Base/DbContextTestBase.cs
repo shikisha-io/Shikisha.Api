@@ -1,6 +1,6 @@
-using Shikisha.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Shikisha.DataAccess;
 
 namespace Shikisha.Tests
 {

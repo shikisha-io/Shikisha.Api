@@ -1,30 +1,21 @@
 using System;
 using Models = Shikisha.DataAccess.DomainModels;
 using Xunit;
+using Shikisha.Tests.BaseEntity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Shikisha.Tests.Product
 {
     /// <summary>
     /// Tests focused on logic around creating a Product entity within the data context.
     /// </summary>
-    public class ProductCreatingTests : DataAccessTestBase
-    {        
+    public class Creation : BaseEntityTests<Models.Product>
+    {
         [Fact]
-        public void Fact_CreatingBaseEntity_ShouldAutoGenerateFields()
-        {
-            // Arrange
-            var product = new Models.Product("Test Product", "A product for testing things out.");
-
-            // Act
-            dbContext.Products.Add(product);
-            dbContext.SaveChanges();
-
-            // Assert
-            Assert.NotNull(product.InsertedUtc);
-            Assert.NotNull(product.UpdatedUtc);
-            Assert.True(product.InsertedUtc >= DateTime.UtcNow.AddMinutes(-5));
-            Assert.True(product.UpdatedUtc >= DateTime.UtcNow.AddMinutes(-5));
-            Assert.True(product.Id != default(Guid));
-        }
+        public void Fact_CreatingProduct_ShouldAutoGenerateFields() 
+            => Fact_CreatingBaseEntity_ShouldAutoGenerateFields(
+                new Models.Product("Test Product", "A product for testing things out."),
+                dbContext.Products
+            );
     }
 }
