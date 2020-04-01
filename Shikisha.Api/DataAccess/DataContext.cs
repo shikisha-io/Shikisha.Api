@@ -54,7 +54,11 @@ namespace Shikisha.DataAccess
             modelBuilder.Entity<Product>(product =>
             {
                 product.ToTable("Products")
-                .HasKey(key => key.Id);
+                    .HasKey(key => key.Id);
+
+                product.HasMany(p => p.Projects)
+                    .WithOne(project => project.Product)
+                    .OnDelete(DeleteBehavior.SetNull);
             });
         }
     }

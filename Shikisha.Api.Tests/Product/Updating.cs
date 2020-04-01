@@ -2,6 +2,8 @@ using System;
 using Models = Shikisha.DataAccess.DomainModels;
 using Xunit;
 using Shikisha.Tests.BaseEntity;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Shikisha.Tests.Product
 {
