@@ -10,6 +10,7 @@ namespace Shikisha.DataAccess
     public class ShikishaDataContext : DbContext
     {
         public DbSet<Product> Products { get; set; }
+        public DbSet<Project> Projects { get; set; }
         public ShikishaDataContext(DbContextOptions<ShikishaDataContext> options) : base(options) { }
 
         private void SetDefaultEntityValues()
@@ -59,6 +60,11 @@ namespace Shikisha.DataAccess
                 product.HasMany(p => p.Projects)
                     .WithOne(project => project.Product)
                     .OnDelete(DeleteBehavior.SetNull);
+            });
+            modelBuilder.Entity<Project>(project =>
+            {
+                project.ToTable("Projects")
+                    .HasKey(key => key.Id);
             });
         }
     }

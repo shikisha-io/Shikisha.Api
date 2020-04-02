@@ -7,6 +7,7 @@ namespace Shikisha.DataAccess.DomainModels
     public class Project : EntityBase
     {
         public Project(string name, string description) : base(name, description) {}
+        public Project() : base() {}
 
         public Product Product { get; set; }
     }

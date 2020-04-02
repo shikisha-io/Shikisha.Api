@@ -15,8 +15,8 @@ namespace Shikisha.Api.Controllers
     public abstract class ApiControllerBase<TEntity> : ControllerBase
     where TEntity : EntityBase
     {
-        private readonly ILogger<ApiControllerBase<TEntity>> _logger;
-        private readonly IService<TEntity> _service;
+        protected readonly ILogger<ApiControllerBase<TEntity>> _logger;
+        protected readonly IService<TEntity> _service;
 
         public ApiControllerBase(ILogger<ApiControllerBase<TEntity>> logger, IService<TEntity> service)
         {

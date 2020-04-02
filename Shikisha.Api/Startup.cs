@@ -30,12 +30,17 @@ namespace Shikisha.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services
+                .AddControllers()
+                .AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
 
             services.AddDbContext<ShikishaDataContext>(opt =>
                 opt.UseInMemoryDatabase("DevApiDb"));
 
             services.AddTransient<IService<Product>, ProductService>();
+            services.AddTransient<IService<Project>, ProjectService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
