@@ -23,7 +23,7 @@ namespace Shikisha.Services
 
         public async Task<IList<TEntity>> GetAll() => await _dbSet.ToListAsync();
 
-        public async Task<TEntity> GetById(Guid id) => await _dbSet.FindAsync(id);
+        public async Task<TEntity> GetById(Guid id) => await _dbSet.FirstAsync(x => x.Id == id);
 
         public async Task<TEntity> Add(TEntity entity)
         {
