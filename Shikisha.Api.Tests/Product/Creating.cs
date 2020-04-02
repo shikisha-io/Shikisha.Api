@@ -11,7 +11,7 @@ namespace Shikisha.Tests.Product
     /// <summary>
     /// Tests focused on logic around creating a Product entity within the data context.
     /// </summary>
-    public class Creation : BaseEntityTests<Models.Product>
+    public sealed class Creation : BaseEntityTests<Models.Product>
     {
         [Fact]
         public void Fact_CreatingProduct_ShouldAutoGenerateFields()

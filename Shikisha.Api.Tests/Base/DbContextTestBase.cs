@@ -4,7 +4,7 @@ using Shikisha.DataAccess;
 
 namespace Shikisha.Tests
 {
-    public class DataAccessTestBase
+    public abstract class DataAccessTestBase
     {
         protected ShikishaDataContext dbContext;
         public DataAccessTestBase(ShikishaDataContext dbContext = null) => this.dbContext = dbContext ?? GetInMemoryDBContext();

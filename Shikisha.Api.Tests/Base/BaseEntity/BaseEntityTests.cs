@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Shikisha.Tests.BaseEntity
 {
-    public class BaseEntityTests<TEntity> : DataAccessTestBase
+    public abstract class BaseEntityTests<TEntity> : DataAccessTestBase
     where TEntity : EntityBase
     {      
         public void BaseEntityCreationAssertions<T>(T entity) where T : EntityBase

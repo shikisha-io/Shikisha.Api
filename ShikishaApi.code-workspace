@@ -20,75 +20,75 @@
         ]
     },
     "tasks": {
+        "version": "2.0.0",
         "tasks": [
             {
-                "type": "docker-build",
-                "label": "docker-build: debug",
-                "dependsOn": [
-                    "build"
+                "label": "build",
+                "command": "dotnet",
+                "type": "process",
+                "args": [
+                    "build",
+                    "${workspaceFolder:API}/Shikisha.Api.csproj",
+                    "/property:GenerateFullPaths=true",
+                    "/consoleloggerparameters:NoSummary"
                 ],
-                "dockerBuild": {
-                    "tag": "api:dev",
-                    "target": "base",
-                    "dockerfile": "${workspaceFolder}/Dockerfile",
-                    "context": "${workspaceFolder}",
-                    "pull": true
-                },
-                "netCore": {
-                    "appProject": "${workspaceFolder}/Shikisha.Api.csproj"
-                }
+                "problemMatcher": "$msCompile"
             },
             {
-                "type": "docker-build",
-                "label": "docker-build: release",
-                "dependsOn": [
-                    "build"
+                "label": "publish",
+                "command": "dotnet",
+                "type": "process",
+                "args": [
+                    "publish",
+                    "${workspaceFolder:API}/Shikisha.Api.csproj",
+                    "/property:GenerateFullPaths=true",
+                    "/consoleloggerparameters:NoSummary"
                 ],
-                "dockerBuild": {
-                    "tag": "api:latest",
-                    "dockerfile": "${workspaceFolder}/Dockerfile",
-                    "context": "${workspaceFolder}",
-                    "pull": true
-                },
-                "netCore": {
-                    "appProject": "${workspaceFolder}/Shikisha.Api.csproj"
-                }
+                "problemMatcher": "$msCompile"
             },
             {
-                "type": "docker-run",
-                "label": "docker-run: debug",
-                "dependsOn": [
-                    "docker-build: debug"
+                "label": "watch",
+                "command": "dotnet",
+                "type": "process",
+                "args": [
+                    "watch",
+                    "run",
+                    "${workspaceFolder:API}/Shikisha.Api.csproj",
+                    "/property:GenerateFullPaths=true",
+                    "/consoleloggerparameters:NoSummary"
                 ],
-                "dockerRun": {},
-                "netCore": {
-                    "appProject": "${workspaceFolder}/Shikisha.Api.csproj",
-                    "enableDebugging": true
-                }
-            },
-            {
-                "type": "docker-run",
-                "label": "docker-run: release",
-                "dependsOn": [
-                    "docker-build: release"
-                ],
-                "dockerRun": {},
-                "netCore": {
-                    "appProject": "${workspaceFolder}/Shikisha.Api.csproj"
-                }
+                "problemMatcher": "$msCompile"
             }
         ]
     },
     "launch": {
+        "version": "0.2.0",
         "configurations": [
             {
-                "name": "Docker .NET Core Launch",
-                "type": "docker",
+                "name": ".NET Core Launch (web)",
+                "type": "coreclr",
                 "request": "launch",
-                "preLaunchTask": "docker-run: debug",
-                "netCore": {
-                    "appProject": "${workspaceFolder}/Shikisha.Api.csproj"
+                "preLaunchTask": "build",
+                "program": "${workspaceFolder:API}/bin/Debug/netcoreapp3.1/Shikisha.Api.dll",
+                "args": [],
+                "cwd": "${workspaceFolder:API}",
+                "stopAtEntry": false,
+                "serverReadyAction": {
+                    "action": "openExternally",
+                    "pattern": "^\\s*Now listening on:\\s+(https?://\\S+)"
+                },
+                "env": {
+                    "ASPNETCORE_ENVIRONMENT": "Development"
+                },
+                "sourceFileMap": {
+                    "/Views": "${workspaceFolder:API}/Views"
                 }
+            },
+            {
+                "name": ".NET Core Attach",
+                "type": "coreclr",
+                "request": "attach",
+                "processId": "${command:pickProcess}"
             }
         ]
     }

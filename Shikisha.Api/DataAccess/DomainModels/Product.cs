@@ -9,5 +9,6 @@ namespace Shikisha.DataAccess.DomainModels
     {
         public ICollection<Project> Projects { get; set; }
         public Product(string name, string description) : base(name, description) {}
+        public Product() : base() {}
     }
 }

@@ -10,7 +10,7 @@ namespace Shikisha.Tests.Product
     /// <summary>
     /// Tests focused on logic around updating a Product entity within the data context.
     /// </summary>
-    public class Updating : BaseEntityTests<Models.Product>
+    public sealed class Updating : BaseEntityTests<Models.Product>
     {        
         [Fact]
         public void Fact_UpdatingProduct_ShouldAutoGenerateFields() 

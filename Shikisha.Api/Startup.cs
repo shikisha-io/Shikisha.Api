@@ -6,10 +6,15 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Shikisha.DataAccess;
+using Shikisha.DataAccess.DomainModels;
+using Shikisha.Services;
+using Shikisha.Services.Interfaces;
 
 namespace Shikisha.Api
 {
@@ -26,6 +31,11 @@ namespace Shikisha.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddDbContext<ShikishaDataContext>(opt =>
+                opt.UseInMemoryDatabase("DevApiDb"));
+
+            services.AddTransient<IService<Product>, ProductService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
