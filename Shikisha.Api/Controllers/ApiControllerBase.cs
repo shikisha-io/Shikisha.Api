@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Shikisha.DataAccess;
 using Shikisha.DataAccess.DomainModels;
@@ -31,18 +32,23 @@ namespace Shikisha.Api.Controllers
         }
 
         [HttpGet]
-        [Route("{Id}")]
-        public async Task<TEntity> GetById(Guid id)
-        {
-            return await _service.GetById(id);
-        }
+        [Route("{Id:Guid}")]
+        public async Task<TEntity> GetById([FromRoute] Guid id, [FromQuery] bool expanded) => await _service.GetById(id, expanded);
 
         [HttpPost]
-        public async Task<TEntity> Add(TEntity entity)
+        public async Task<TEntity> Add([FromBody] TEntity entity)
         {
             var createdEntity = await _service.Add(entity);
             // return CreatedAtAction(nameof(GetById), createdProduct.Id, createdProduct);
             return createdEntity;
+        }
+
+        [HttpPut]
+        [Route("{Id:Guid}")]
+        public async Task<TEntity> Update([FromRoute] Guid id, [FromBody] TEntity entity)
+        {
+            var upatedEntity = await _service.Update(id, entity);
+            return upatedEntity;
         }
     }
 }

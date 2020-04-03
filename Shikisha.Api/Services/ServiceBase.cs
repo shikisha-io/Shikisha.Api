@@ -21,9 +21,9 @@ namespace Shikisha.Services
             throw new NotImplementedException();
         }
 
-        public async Task<IList<TEntity>> GetAll() => await _dbSet.ToListAsync();
+        public async Task<IList<TEntity>> GetAll() => await _dbSet.AsNoTracking().ToListAsync();
 
-        public async Task<TEntity> GetById(Guid id) => await _dbSet.FirstAsync(x => x.Id == id);
+        public virtual async Task<TEntity> GetById(Guid id, bool includeSubCollections = false) => await _dbSet.FirstAsync(x => x.Id == id);
 
         public async Task<TEntity> Add(TEntity entity)
         {
