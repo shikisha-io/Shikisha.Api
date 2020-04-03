@@ -1,6 +1,5 @@
 using Models = Shikisha.DataAccess.DomainModels;
 using Xunit;
-using Shikisha.Tests.DataAccess.EntityBase;
 
 namespace Shikisha.Tests.DataAccess.Product
 {

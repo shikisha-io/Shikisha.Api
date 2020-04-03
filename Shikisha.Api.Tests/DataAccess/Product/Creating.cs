@@ -1,10 +1,8 @@
 using System;
 using Models = Shikisha.DataAccess.DomainModels;
 using Xunit;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
-using Shikisha.Tests.DataAccess.EntityBase;
 
 namespace Shikisha.Tests.DataAccess.Product
 {
