@@ -29,7 +29,7 @@ namespace Shikisha.DataAccess.Validation
         /// <param name="propertyName">The property being validated - user friendly name for displaying in error message.</param>
         /// <typeparam name="TEntity"></typeparam>
         /// <returns></returns>
-        public static IRuleBuilderOptions<TEntity, string> NameValidation<TEntity>(this IRuleBuilder<TEntity, string> rule, string propertyName = null)
+        public static IRuleBuilderOptions<TEntity, string> NameValidation<TEntity>(this IRuleBuilder<TEntity, string> rule, string propertyName = "Name")
         {
             return rule
                 .NotNullOrEmpty(propertyName)

@@ -16,5 +16,13 @@ namespace Shikisha.DataAccess
         public DateTime InsertedUtc { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime UpdatedUtc { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+
+        public EntityBase(string name, string description) =>
+        (this.Name, this.Description) =
+        (name, description);
+
+        public EntityBase(){}
     }
 }
