@@ -47,7 +47,8 @@ namespace Shikisha.Services
         public async Task<ServiceResponse<List<TEntity>>> GetAll() => await ServiceAction(async () => await _dbSet.AsNoTracking().ToListAsync());
 
         public virtual async Task<ServiceResponse<TEntity>> GetById(Guid id, bool includeSubCollections = false)
-            => await ServiceAction(async () => await _dbSet.FirstAsync(x => x.Id == id));
+            => await ServiceAction(async () => 
+                await _dbSet.FirstOrDefaultAsync(x => x.Id == id) ?? throw new Exception($"Specified Entity {id} does not exist."));
 
         public async Task<ServiceResponse<TEntity>> Add(TEntity entity)
             => await ServiceAction(async () =>
