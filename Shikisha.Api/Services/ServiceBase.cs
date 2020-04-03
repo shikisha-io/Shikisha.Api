@@ -16,6 +16,7 @@ namespace Shikisha.Services
     {
         protected readonly ShikishaDataContext _dbContext;
         protected abstract DbSet<TEntity> _dbSet { get; }
+        protected abstract IQueryable<TEntity> _dbSetWithSubCollections { get; }
         private readonly AbstractValidator<TEntity> _validator;
         public ServiceBase(ShikishaDataContext dbContext, AbstractValidator<TEntity> validator) => (_dbContext, _validator) = (dbContext, validator);
 
@@ -46,9 +47,10 @@ namespace Shikisha.Services
 
         public async Task<ServiceResponse<List<TEntity>>> GetAll() => await ServiceAction(async () => await _dbSet.AsNoTracking().ToListAsync());
 
-        public virtual async Task<ServiceResponse<TEntity>> GetById(Guid id, bool includeSubCollections = false)
+        public async Task<ServiceResponse<TEntity>> GetById(Guid id, bool includeSubCollections = false)
             => await ServiceAction(async () => 
-                await _dbSet.FirstOrDefaultAsync(x => x.Id == id) ?? throw new Exception($"Specified Entity {id} does not exist."));
+                await (includeSubCollections ? _dbSetWithSubCollections.AsNoTracking() : _dbSet)
+                .FirstOrDefaultAsync(x => x.Id == id) ?? throw new Exception($"Specified Entity {id} does not exist."));
 
         public async Task<ServiceResponse<TEntity>> Add(TEntity entity)
             => await ServiceAction(async () =>

@@ -19,14 +19,6 @@ namespace Shikisha.Services
 
         protected override DbSet<Product> _dbSet => _dbContext.Products;
 
-        public override async Task<ServiceResponse<Product>> GetById(Guid id, bool includeSubCollections = false)
-            => await ServiceAction(async () =>
-            {
-                var request = _dbSet.AsQueryable();
-                if (includeSubCollections == true)
-                    request = request.AsNoTracking().Include(x => x.Projects);
-
-                return await request.FirstAsync(x => x.Id == id);
-            });
+        protected override IQueryable<Product> _dbSetWithSubCollections => _dbSet.Include(x => x.Projects);
     }
 }
