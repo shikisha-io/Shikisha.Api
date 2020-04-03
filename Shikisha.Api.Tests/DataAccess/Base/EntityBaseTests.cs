@@ -1,14 +1,14 @@
 using System;
 using Xunit;
-using Shikisha.DataAccess;
+using Dal = Shikisha.DataAccess;
 using Microsoft.EntityFrameworkCore;
 
-namespace Shikisha.Tests.BaseEntity
+namespace Shikisha.Tests.DataAccess.EntityBase
 {
-    public abstract class BaseEntityTests<TEntity> : DataAccessTestBase
-    where TEntity : EntityBase
+    public abstract class EntityBaseTests<TEntity> : DataAccessTestBase
+    where TEntity : Dal.EntityBase
     {      
-        public void BaseEntityCreationAssertions<T>(T entity) where T : EntityBase
+        public void EntityBaseCreationAssertions<T>(T entity) where T : Dal.EntityBase
         {
             Assert.NotNull(entity.InsertedUtc);
             Assert.NotNull(entity.UpdatedUtc);
@@ -16,14 +16,14 @@ namespace Shikisha.Tests.BaseEntity
             Assert.True(entity.UpdatedUtc >= DateTime.UtcNow.AddMinutes(-5));
             Assert.True(entity.Id != default(Guid));
         }
-        public void BaseEntityUpdatingAssertions<T>(T entity, Guid initialId, DateTime initialInsertTimeStamp, DateTime initialUpdateTimeStamp) where T : EntityBase
+        public void EntityBaseUpdatingAssertions<T>(T entity, Guid initialId, DateTime initialInsertTimeStamp, DateTime initialUpdateTimeStamp) where T : Dal.EntityBase
         {
             Assert.Equal(initialId, entity.Id);
             Assert.Equal(initialInsertTimeStamp, entity.InsertedUtc);
             Assert.True(entity.UpdatedUtc > initialUpdateTimeStamp);
         }
 
-        public TEntity Fact_CreatingBaseEntity_ShouldAutoGenerateFields(TEntity entity, DbSet<TEntity> dbSet)
+        public TEntity Fact_CreatingEntityBase_ShouldAutoGenerateFields(TEntity entity, DbSet<TEntity> dbSet)
         {
             // Arrange
 
@@ -32,11 +32,11 @@ namespace Shikisha.Tests.BaseEntity
             dbContext.SaveChanges();
 
             // Assert
-            BaseEntityCreationAssertions(entity);
+            EntityBaseCreationAssertions(entity);
             return entity;
         }
 
-        public TEntity Fact_UpdatingBaseEntity_ShouldAutoGenerateFields(TEntity entity, DbSet<TEntity> dbSet, Action<TEntity> updateAction)
+        public TEntity Fact_UpdatingEntityBase_ShouldAutoGenerateFields(TEntity entity, DbSet<TEntity> dbSet, Action<TEntity> updateAction)
         {
             // Arrange
             dbSet.Add(entity);
@@ -49,7 +49,7 @@ namespace Shikisha.Tests.BaseEntity
             dbContext.SaveChanges();
 
             // Assert
-            BaseEntityUpdatingAssertions(entity, initialId, initialInsertTimeStamp, initialUpdateTimeStamp);
+            EntityBaseUpdatingAssertions(entity, initialId, initialInsertTimeStamp, initialUpdateTimeStamp);
             return entity;
         }
     }
