@@ -26,8 +26,16 @@ namespace Shikisha.Api.Controllers
             _service = service;
         }
 
+        protected ActionResult<Task<ServiceResponse<T>>> ApiResponse<T>(ServiceResponse<T> serviceResponse)
+        {
+            if(serviceResponse.Errors != null)
+                return BadRequest(serviceResponse);
+            return Ok(serviceResponse);
+        }
+
         [HttpGet]
-        public async Task<ServiceResponse<List<TEntity>>> Get() => await _service.GetAll();
+        public async Task<ActionResult<Task<ServiceResponse<List<TEntity>>>>> Get() => ApiResponse(await _service.GetAll());
+        
         [HttpGet]
         [Route("{Id:Guid}")]
         public async Task<ServiceResponse<TEntity>> GetById([FromRoute] Guid id, [FromQuery] bool expanded) => await _service.GetById(id, expanded);

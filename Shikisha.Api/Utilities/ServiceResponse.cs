@@ -11,6 +11,7 @@ namespace Shikisha.Utilities
         public List<ServiceError> Errors {get; set;}
         public T Data {get; set;}
         public ServiceResponse(){}
+        
         public ServiceResponse(List<ServiceError> errors)
             => Errors = errors;
 

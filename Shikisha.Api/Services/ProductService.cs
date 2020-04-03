@@ -26,7 +26,7 @@ namespace Shikisha.Services
                 if (includeSubCollections == true)
                     request = request.AsNoTracking().Include(x => x.Projects);
 
-                return await request.FirstAsync();
+                return await request.FirstAsync(x => x.Id == id);
             });
     }
 }
