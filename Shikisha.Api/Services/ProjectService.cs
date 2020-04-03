@@ -17,5 +17,7 @@ namespace Shikisha.Services
         }
 
         protected override DbSet<Project> _dbSet => _dbContext.Projects;
+
+        protected override IQueryable<Project> _dbSetWithSubCollections => _dbSet;
     }
 }
