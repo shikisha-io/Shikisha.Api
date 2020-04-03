@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Shikisha.DataAccess;
 using Shikisha.DataAccess.DomainModels;
 using Shikisha.Services.Interfaces;
+using Shikisha.Utilities;
 
 namespace Shikisha.Api.Controllers
 {
@@ -21,10 +22,10 @@ namespace Shikisha.Api.Controllers
 
         [HttpPost]
         [Route("{productId}")]
-        public async Task<Project> AddToProduct(Guid productId, Project entity)
+        public async Task<ServiceResponse<Project>> AddToProduct(Guid productId, Project entity)
         {
             var foundProduct = await _productService.GetById(productId);
-            entity.Product = foundProduct;
+            entity.Product = foundProduct.Data;
             var createdEntity = await _service.Add(entity);
             return createdEntity;
         }
