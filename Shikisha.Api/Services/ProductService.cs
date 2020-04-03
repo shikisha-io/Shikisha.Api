@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Shikisha.DataAccess;
 using Shikisha.DataAccess.DomainModels;
 using Shikisha.DataAccess.Validation;
+using Shikisha.Utilities;
 
 namespace Shikisha.Services
 {
@@ -18,13 +19,6 @@ namespace Shikisha.Services
 
         protected override DbSet<Product> _dbSet => _dbContext.Products;
 
-        public override async Task<Product> GetById(Guid id, bool includeSubCollections = false)
-        {
-            var request = _dbSet.AsQueryable();
-            if(includeSubCollections == true)
-                request = request.AsNoTracking().Include(x => x.Projects);
-                
-            return await request.FirstAsync();
-        }
+        protected override IQueryable<Product> _dbSetWithSubCollections => _dbSet.Include(x => x.Projects);
     }
 }

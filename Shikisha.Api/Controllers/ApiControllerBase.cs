@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Shikisha.DataAccess;
 using Shikisha.DataAccess.DomainModels;
 using Shikisha.Services.Interfaces;
+using Shikisha.Utilities;
 
 namespace Shikisha.Api.Controllers
 {
@@ -25,18 +26,22 @@ namespace Shikisha.Api.Controllers
             _service = service;
         }
 
-        [HttpGet]
-        public async Task<IEnumerable<TEntity>> Get()
+        protected ActionResult<Task<ServiceResponse<T>>> ApiResponse<T>(ServiceResponse<T> serviceResponse)
         {
-            return await _service.GetAll();
+            if(serviceResponse.Errors != null)
+                return BadRequest(serviceResponse);
+            return Ok(serviceResponse);
         }
 
         [HttpGet]
+        public async Task<ActionResult<Task<ServiceResponse<List<TEntity>>>>> Get() => ApiResponse(await _service.GetAll());
+        
+        [HttpGet]
         [Route("{Id:Guid}")]
-        public async Task<TEntity> GetById([FromRoute] Guid id, [FromQuery] bool expanded) => await _service.GetById(id, expanded);
+        public async Task<ServiceResponse<TEntity>> GetById([FromRoute] Guid id, [FromQuery] bool expanded) => await _service.GetById(id, expanded);
 
         [HttpPost]
-        public async Task<TEntity> Add([FromBody] TEntity entity)
+        public async Task<ServiceResponse<TEntity>> Add([FromBody] TEntity entity)
         {
             var createdEntity = await _service.Add(entity);
             // return CreatedAtAction(nameof(GetById), createdProduct.Id, createdProduct);
@@ -45,7 +50,7 @@ namespace Shikisha.Api.Controllers
 
         [HttpPut]
         [Route("{Id:Guid}")]
-        public async Task<TEntity> Update([FromRoute] Guid id, [FromBody] TEntity entity)
+        public async Task<ServiceResponse<TEntity>> Update([FromRoute] Guid id, [FromBody] TEntity entity)
         {
             var upatedEntity = await _service.Update(id, entity);
             return upatedEntity;
