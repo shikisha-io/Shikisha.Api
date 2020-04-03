@@ -2,9 +2,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Shikisha.DataAccess;
 
-namespace Shikisha.Tests
+namespace Shikisha.Tests.DataAccess
 {
-    public class DataAccessTestBase
+    public abstract class DataAccessTestBase
     {
         protected ShikishaDataContext dbContext;
         public DataAccessTestBase(ShikishaDataContext dbContext = null) => this.dbContext = dbContext ?? GetInMemoryDBContext();
