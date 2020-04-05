@@ -20,5 +20,9 @@ namespace Shikisha.Tests.Controllers.Product
                 new Models.Product("Test Product A", "A new product"),
                 new Models.Product("Test Product B", "A new product")
             });
+
+        [Fact]
+        public void Fact_GetById_Success() =>
+            Fact_BaseGetById_Success(new Models.Product("Test Product A", "A new product"));
     }
 }

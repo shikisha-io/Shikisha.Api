@@ -21,5 +21,9 @@ namespace Shikisha.Tests.Controllers.Project
                 new Models.Project("Test Product A", "A new product"),
                 new Models.Project("Test Product B", "A new product")
             });
+
+        [Fact]
+        public void Fact_GetById_Success() =>
+            Fact_BaseGetById_Success(new Models.Project("Test Project A", "A new project"));
     }
 }
