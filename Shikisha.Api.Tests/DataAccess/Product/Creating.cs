@@ -3,6 +3,12 @@ using Models = Shikisha.DataAccess.DomainModels;
 using Xunit;
 using System.Collections.Generic;
 using System.Linq;
+using Moq;
+using Shikisha.Services.Interfaces;
+using System.Threading.Tasks;
+using Shikisha.Utilities;
+using Shikisha.Api.Controllers;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Shikisha.Tests.DataAccess.Product
 {

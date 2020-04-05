@@ -5,6 +5,5 @@ namespace Shikisha.Tests.DataAccess.Project
 {
     public class Validation : ValidationBaseTests<Models.Project>
     {
-        private readonly ValidatorBase<Models.Project> _validator = new ValidatorBase<Models.Project>();
     }
 }
