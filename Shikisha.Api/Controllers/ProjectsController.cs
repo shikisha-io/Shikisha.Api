@@ -22,7 +22,7 @@ namespace Shikisha.Api.Controllers
 
         [HttpPost]
         [Route("{productId}")]
-        public async Task<ActionResult<Task<ServiceResponse<Project>>>> AddToProduct(Guid productId, Project entity)
+        public async Task<ActionResult<ServiceResponse<Project>>> AddToProduct(Guid productId, Project entity)
         {
             var foundProduct = await _productService.GetById(productId);
             if(foundProduct.Errors != null)

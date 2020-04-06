@@ -11,7 +11,7 @@ using Shikisha.Utilities;
 
 namespace Shikisha.Services
 {
-    public abstract class ServiceBase<TEntity> : IService<TEntity>
+    public abstract class ServiceBase<TEntity> : IService<TEntity>, IDisposable, IAsyncDisposable
     where TEntity : EntityBase
     {
         protected readonly ShikishaDataContext _dbContext;
@@ -67,5 +67,14 @@ namespace Shikisha.Services
                 await _dbContext.SaveChangesAsync();
                 return entity;
             });
+
+        public void Dispose()
+        {
+            this._dbContext.Dispose();
+        }
+        ValueTask IAsyncDisposable.DisposeAsync()
+        {
+            return _dbContext.DisposeAsync();
+        }
     }
 }
