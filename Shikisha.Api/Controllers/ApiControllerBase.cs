@@ -34,11 +34,13 @@ namespace Shikisha.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ServiceResponse<List<TEntity>>>> Get() => ApiResponse(await _service.GetAll());
+        public async Task<ActionResult<ServiceResponse<List<TEntity>>>> Get()
+            => ApiResponse(await _service.GetAll());
         
         [HttpGet]
         [Route("{Id:Guid}")]
-        public async Task<ActionResult<ServiceResponse<TEntity>>> GetById([FromRoute] Guid id, [FromQuery] bool expanded) => ApiResponse(await _service.GetById(id, expanded));
+        public async Task<ActionResult<ServiceResponse<TEntity>>> GetById([FromRoute] Guid id, [FromQuery] bool expanded)
+            => ApiResponse(await _service.GetById(id, expanded));
 
         [HttpPost]
         public async Task<ActionResult<ServiceResponse<TEntity>>> Add([FromBody] TEntity entity)
@@ -46,10 +48,7 @@ namespace Shikisha.Api.Controllers
 
         [HttpPut]
         [Route("{Id:Guid}")]
-        public async Task<ServiceResponse<TEntity>> Update([FromRoute] Guid id, [FromBody] TEntity entity)
-        {
-            var upatedEntity = await _service.Update(id, entity);
-            return upatedEntity;
-        }
+        public async Task<ActionResult<ServiceResponse<TEntity>>> Update([FromRoute] Guid id, [FromBody] TEntity entity)
+            => ApiResponse(await _service.Update(id, entity));
     }
 }

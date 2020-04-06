@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -18,10 +19,18 @@ namespace Shikisha.Tests.Controllers
     {
         protected readonly Mock<IService<TEntity>> _mockService;
         protected readonly ApiControllerBase<TEntity> _controller;
-        protected ControllerBaseTests(Func<IService<TEntity>, ApiControllerBase<TEntity>> controllerConstructorFunc)
+
+        protected readonly TEntity _mockObject;
+        protected readonly List<TEntity> _mockObjectList;
+
+        protected readonly Guid _mockId = new Guid();
+        protected ControllerBaseTests(Func<IService<TEntity>, ApiControllerBase<TEntity>> controllerConstructorFunc, Func<TEntity> generateMockObject, List<TEntity> mockObjectList = null)
         {
             _mockService = new Mock<IService<TEntity>>();
             _controller = controllerConstructorFunc(_mockService.Object);
+
+            _mockObject = generateMockObject();
+            _mockObjectList = mockObjectList ?? Enumerable.Range(0, 5).Select(x => generateMockObject()).ToList();
         }
 
         protected async Task<ActionResult<ServiceResponse<T>>> SuccessTest<T>(T mockResult,
@@ -42,37 +51,20 @@ namespace Shikisha.Tests.Controllers
             return result;
         }
 
-        protected async Task<ActionResult<ServiceResponse<List<TEntity>>>> Fact_BaseGetAll_Success(List<TEntity> mockResult)
-        {
-            return await SuccessTest(mockResult, service => service.GetAll(), controller => controller.Get());
-            // return await SuccessTest(mockResult, async (mockResponse) =>
-            // {
-            //     _mockService.Setup(x => x.GetAll()).ReturnsAsync(mockResponse);
-            //     return await _controller.Get();
-            // }, service => service.GetAll(), controller => controller.Get(), service => service.GetAll());
-        }
+        [Fact]
+        public async Task<ActionResult<ServiceResponse<List<TEntity>>>> Fact_BaseGetAll_Success()
+            => await SuccessTest(_mockObjectList, service => service.GetAll(), controller => controller.Get());
 
-        protected async Task<ActionResult<ServiceResponse<TEntity>>> Fact_BaseGetById_Success(TEntity mockResult)
-        {
-            var id = new Guid();
-            return await SuccessTest(mockResult, service => service.GetById(id, false), controller => controller.GetById(id, false));
-            // return await SuccessTest(mockResult, async (mockResponse) =>
-            // {
-            //     _mockService.Setup(x => x.GetById(id, false)).ReturnsAsync(mockResponse);
-            //     return await _controller.GetById(id, false);
-            // }, x => x.GetById(id, false));
-        }
+        [Fact]
+        public async Task<ActionResult<ServiceResponse<TEntity>>> Fact_BaseGetById_Success()
+            => await SuccessTest(_mockObject, service => service.GetById(_mockId, false), controller => controller.GetById(_mockId, false));
 
-        protected async Task<ActionResult<ServiceResponse<TEntity>>> Fact_BaseAdd_Success(TEntity mockResult)
-        {
-            return await SuccessTest(mockResult, service => service.Add(mockResult), controller => controller.Add(mockResult));
-            // var response = await SuccessTest(mockResult, async (mockResponse) =>
-            // {
-            //     _mockService.Setup(x => x.Add(mockResult)).ReturnsAsync(mockResponse);
-            //     return await _controller.Add(mockResult);
-            // });
+        [Fact]
+        public async Task<ActionResult<ServiceResponse<TEntity>>> Fact_BaseAdd_Success()
+            => await SuccessTest(_mockObject, service => service.Add(_mockObject), controller => controller.Add(_mockObject));
 
-            // return response;
-        }
+        [Fact]
+        public async Task<ActionResult<ServiceResponse<TEntity>>> Fact_BaseUpdate_Success()
+            => await SuccessTest(_mockObject, service => service.Update(_mockId, _mockObject), controller => controller.Update(_mockId, _mockObject));
     }
 }
