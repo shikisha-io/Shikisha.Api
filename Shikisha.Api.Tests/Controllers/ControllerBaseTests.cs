@@ -24,36 +24,55 @@ namespace Shikisha.Tests.Controllers
             _controller = controllerConstructorFunc(_mockService.Object);
         }
 
-        protected async void SuccessTest<T>(T mockResult,
-        Func<ServiceResponse<T>, Task<ActionResult<ServiceResponse<T>>>> controllerActionResponse)
+        protected async Task<ActionResult<ServiceResponse<T>>> SuccessTest<T>(T mockResult,
+        Expression<Func<IService<TEntity>, Task<ServiceResponse<T>>>> methodToCall,
+        Func<ApiControllerBase<TEntity>, Task<ActionResult<ServiceResponse<T>>>> controllerAction)
         {
             var mockResponse = new ServiceResponse<T>(mockResult);
+            
+            _mockService.Setup(methodToCall).ReturnsAsync(mockResponse);
 
-            var result = await controllerActionResponse(mockResponse);
+            var result = await controllerAction(_controller);
 
             var actionResult = Assert.IsType<ActionResult<ServiceResponse<T>>>(result);
             var okResult = Assert.IsType<OkObjectResult>(result.Result);
             Assert.Equal(200, okResult.StatusCode);
             Assert.Equal(mockResponse, okResult.Value);
+            _mockService.Verify(methodToCall, Times.Once);
+            return result;
         }
 
-        protected void Fact_BaseGetAll_Success(List<TEntity> mockResult)
+        protected async Task<ActionResult<ServiceResponse<List<TEntity>>>> Fact_BaseGetAll_Success(List<TEntity> mockResult)
         {
-            SuccessTest(mockResult, async (mockResponse) =>
-            {
-                _mockService.Setup(x => x.GetAll()).ReturnsAsync(mockResponse);
-                return await _controller.Get();
-            });
+            return await SuccessTest(mockResult, service => service.GetAll(), controller => controller.Get());
+            // return await SuccessTest(mockResult, async (mockResponse) =>
+            // {
+            //     _mockService.Setup(x => x.GetAll()).ReturnsAsync(mockResponse);
+            //     return await _controller.Get();
+            // }, service => service.GetAll(), controller => controller.Get(), service => service.GetAll());
         }
 
-        protected void Fact_BaseGetById_Success(TEntity mockResult)
+        protected async Task<ActionResult<ServiceResponse<TEntity>>> Fact_BaseGetById_Success(TEntity mockResult)
         {
             var id = new Guid();
-            SuccessTest(mockResult, async (mockResponse) =>
-            {
-                _mockService.Setup(x => x.GetById(id, false)).ReturnsAsync(mockResponse);
-                return await _controller.GetById(id, false);
-            });
+            return await SuccessTest(mockResult, service => service.GetById(id, false), controller => controller.GetById(id, false));
+            // return await SuccessTest(mockResult, async (mockResponse) =>
+            // {
+            //     _mockService.Setup(x => x.GetById(id, false)).ReturnsAsync(mockResponse);
+            //     return await _controller.GetById(id, false);
+            // }, x => x.GetById(id, false));
+        }
+
+        protected async Task<ActionResult<ServiceResponse<TEntity>>> Fact_BaseAdd_Success(TEntity mockResult)
+        {
+            return await SuccessTest(mockResult, service => service.Add(mockResult), controller => controller.Add(mockResult));
+            // var response = await SuccessTest(mockResult, async (mockResponse) =>
+            // {
+            //     _mockService.Setup(x => x.Add(mockResult)).ReturnsAsync(mockResponse);
+            //     return await _controller.Add(mockResult);
+            // });
+
+            // return response;
         }
     }
 }
